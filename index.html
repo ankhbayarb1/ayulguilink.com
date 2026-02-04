@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<title>Will You Be My Valentine?</title>
+<style>
+/* ====== Бүгд CSS ====== */
+* {margin:0; padding:0; box-sizing:border-box; font-family: 'Comic Sans MS', cursive;}
+body {height:100vh; background:linear-gradient(120deg,#ff9a9e,#fad0c4); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;}
+.card {background: rgba(255,255,255,0.9); padding:40px; border-radius:20px; text-align:center; z-index:2;}
+h1 {color:#ff4d6d; margin-bottom:30px;}
+.buttons button {padding:15px 30px; font-size:18px; border-radius:30px; border:none; cursor:pointer; margin:10px;}
+#yesBtn {background:#ff4d6d; color:white;}
+#noBtn {background:#ccc;}
+/* Хөдөлгөөнт зүрх */
+.hearts span {position:absolute; font-size:30px; animation:float linear infinite;}
+@keyframes float {0%{transform:translateY(100vh);}100%{transform:translateY(-10vh);}}
+</style>
+</head>
+<body>
+
+<!-- Хөдөлгөөнт зүрхнүүд -->
+<div class="hearts"></div>
+
+<!-- Хөгжим -->
+<audio autoplay loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+  <h1>Will you be my Valentine? 💘</h1>
+  <div class="buttons">
+    <button id="yesBtn">Тийм 💖</button>
+    <button id="noBtn">Үгүй 💔</button>
+  </div>
+</div>
+
+<script>
+// ====== JavaScript ======
+
+// 1. Хөдөлгөөнт зүрх үүсгэх
+const heartsDiv = document.querySelector(".hearts");
+const heartEmojis = ["💖","💕","💘","💗","💞"];
+for(let i=0;i<20;i++){
+  let span = document.createElement("span");
+  span.innerText = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+  span.style.left = Math.random()*100+"vw";
+  span.style.animationDuration = (5 + Math.random()*5)+"s";
+  span.style.fontSize = (20 + Math.random()*20)+"px";
+  heartsDiv.appendChild(span);
+}
+
+// 2. YES товч
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+
+yesBtn.onclick = () => {
+  notify("Тийм");
+  alert("YAAY 🥰💞 Чи миний Valentine боллоо ❤️");
+};
+
+// 3. NO товч → Тийм үргэлж
+noBtn.onclick = () => {
+  notify("Үгүй (дараад тийм болсон 😏)");
+  noBtn.innerText = "Тийм үргэлж 💘";
+  noBtn.style.background="#ff4d6d";
+  noBtn.style.color="white";
+  noBtn.onclick = () => {
+    alert("YAAY 🥰💞 Чи миний Valentine боллоо ❤️");
+  };
+};
+
+// 4. Мэдэгдэх функц (Formsubmit ашиглаж болно)
+function notify(choice){
+  fetch("https://formsubmit.co/ajax/YOUR_EMAIL@gmail.com", {
+    method:"POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({message:`Хариулт: ${choice}`})
+  });
+}
+
+// 5. Линкээс гарах үед
+window.addEventListener("beforeunload", function (e) {
+  const msg = "Хайрын судалгаанд орсонд баярлалаа ХӨӨРХӨНӨӨ 💖";
+  e.preventDefault();
+  e.returnValue = msg;
+  return msg;
+});
+</script>
+</body>
+</html>
